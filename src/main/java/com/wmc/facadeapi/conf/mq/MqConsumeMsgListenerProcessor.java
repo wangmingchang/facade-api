@@ -9,7 +9,6 @@ import com.wmc.facadeapi.enumeration.TagsEnum;
 import com.wmc.facadeapi.util.PackageUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -19,16 +18,15 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
+ * rocketMq的监听器
  * @auther wangmingchang
  * @date 2019/2/21 10:07
  */
 @Component
-public class MQConsumeMsgListenerProcessor implements MessageListenerConcurrently {
-    private static final Logger logger = LoggerFactory.getLogger(MQConsumeMsgListenerProcessor.class);
+public class MqConsumeMsgListenerProcessor implements MessageListenerConcurrently {
+    private static final Logger logger = LoggerFactory.getLogger(MqConsumeMsgListenerProcessor.class);
 
     private List<String> classNams = new ArrayList<>();
-    @Autowired
-    private MQMsgProcessor mqMsgProcessor;
 
     /**
      *  默认msgs里只有一条消息，可以通过设置consumeMessageBatchMaxSize参数来批量接收消息<br/>
@@ -65,12 +63,12 @@ public class MQConsumeMsgListenerProcessor implements MessageListenerConcurrentl
      * 根据topic 和 tags路由，查找消费消息服务
      * @param topic
      * @param tag
-     * @param value
+     * @param messageExts
      * 2018年3月1日 zhaowg
      */
-    private void consumeMsgForTag(String topic, String tag, List<MessageExt> value) {
+    private void consumeMsgForTag(String topic, String tag, List<MessageExt> messageExts) {
         //根据topic 和  tag查询具体的消费服务
-        MQMsgProcessor imqMsgProcessor = selectConsumeService(topic, tag);
+        MqMsgProcessor imqMsgProcessor = selectConsumeService(topic, tag);
         try{
             if(imqMsgProcessor==null){
                 logger.error(String.format("根据Topic：%s和Tag:%s 没有找到对应的处理消息的服务",topic,tag));
@@ -78,7 +76,7 @@ public class MQConsumeMsgListenerProcessor implements MessageListenerConcurrentl
             }
             logger.info(String.format("根据Topic：%s和Tag:%s 路由到的服务为:%s，开始调用处理消息",topic,tag,imqMsgProcessor.getClass().getName()));
             //调用该类的方法,处理消息
-            MQConsumeResult mqConsumeResult = imqMsgProcessor.handle(topic,tag,value);
+            MqConsumeResult mqConsumeResult = imqMsgProcessor.handle(topic,tag,messageExts);
             if(mqConsumeResult==null){
                 throw new Exception("没有消费返回");
             }
@@ -102,8 +100,8 @@ public class MQConsumeMsgListenerProcessor implements MessageListenerConcurrentl
      * @return
      * 2018年3月3日 zhaowg
      */
-    private MQMsgProcessor selectConsumeService(String topic, String tag) {
-        MQMsgProcessor imqMsgProcessor = null;
+    private MqMsgProcessor selectConsumeService(String topic, String tag) {
+        MqMsgProcessor imqMsgProcessor = null;
         if(null == classNams || classNams.size() <= 0){
             classNams = PackageUtil.getClassName("com.wmc.facadeapi.consumer");
         }
@@ -121,7 +119,7 @@ public class MQConsumeMsgListenerProcessor implements MessageListenerConcurrentl
                 continue;
             }
             //获取service实现类上注解的topic和tags
-            MQConsumeService consumeService = clzz.getAnnotation(MQConsumeService.class);
+            MqConsumeService consumeService = clzz.getAnnotation(MqConsumeService.class);
             if(consumeService == null){
                 logger.error("消费者服务："+clzz.getName()+"上没有添加MQConsumeService注解");
                 continue;
@@ -136,7 +134,7 @@ public class MQConsumeMsgListenerProcessor implements MessageListenerConcurrentl
                 if(tagsEnum.getCode().equals(TagsEnum.TAGS_ALL.getCode()) || tagsEnum.getCode().equals(tag)){
                     //获取该实例
                     try {
-                        imqMsgProcessor = (MQMsgProcessor) clzz.newInstance();
+                        imqMsgProcessor = (MqMsgProcessor) clzz.newInstance();
                     } catch (InstantiationException e) {
                         e.printStackTrace();
                     } catch (IllegalAccessException e) {

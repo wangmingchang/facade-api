@@ -1,9 +1,9 @@
 package com.wmc.facadeapi.consumer;
 
 import com.alibaba.rocketmq.common.message.MessageExt;
-import com.wmc.facadeapi.conf.mq.AbstractMQMsgProcessor;
-import com.wmc.facadeapi.conf.mq.MQConsumeResult;
-import com.wmc.facadeapi.conf.mq.MQConsumeService;
+import com.wmc.facadeapi.conf.mq.AbstractMqMsgProcessor;
+import com.wmc.facadeapi.conf.mq.MqConsumeResult;
+import com.wmc.facadeapi.conf.mq.MqConsumeService;
 import com.wmc.facadeapi.enumeration.TagsEnum;
 import com.wmc.facadeapi.enumeration.TopicEnum;
 
@@ -13,8 +13,8 @@ import java.util.List;
  * @auther wangmingchang
  * @date 2019/2/21 10:46
  */
-@MQConsumeService(topic= TopicEnum.TOPIC_FACADE_API,tags={TagsEnum.TAGS_TEST})
-public class DemoNewTopicConsumerMsgProcessImpl extends AbstractMQMsgProcessor {
+@MqConsumeService(topic= TopicEnum.TOPIC_FACADE_API,tags={TagsEnum.TAGS_TEST})
+public class DemoNewTopicConsumerMsgProcessImpl extends AbstractMqMsgProcessor {
     /**
      * 消息某条消息
      *
@@ -24,7 +24,7 @@ public class DemoNewTopicConsumerMsgProcessImpl extends AbstractMQMsgProcessor {
      * @return
      */
     @Override
-    protected MQConsumeResult consumeMessage(String tag, List<String> keys, MessageExt messageExt) {
+    protected MqConsumeResult consumeMessage(String tag, List<String> keys, MessageExt messageExt) {
         String msg = new String(messageExt.getBody());
         logger.info("获取到的消息为："+msg);
         //TODO 判断该消息是否重复消费（RocketMQ不保证消息不重复，如果你的业务需要保证严格的不重复消息，需要你自己在业务端去重）
@@ -40,7 +40,7 @@ public class DemoNewTopicConsumerMsgProcessImpl extends AbstractMQMsgProcessor {
         if(reconsume ==3){//消息已经重试了3次，如果不需要再次消费，则返回成功
 
         }
-        MQConsumeResult result = new MQConsumeResult();
+        MqConsumeResult result = new MqConsumeResult();
         result.setSuccess(true);
         return result;
     }

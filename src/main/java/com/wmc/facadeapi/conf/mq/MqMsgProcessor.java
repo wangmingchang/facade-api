@@ -8,7 +8,7 @@ import java.util.List;
  * @auther wangmingchang
  * @date 2019/2/21 10:29
  */
-public interface MQMsgProcessor {
+public interface MqMsgProcessor {
     /**
      * 消息处理<br/>
      * 如果没有return true ，consumer会重新消费该消息，直到return true<br/>
@@ -18,5 +18,5 @@ public interface MQMsgProcessor {
      * @param msgs 消息
      * @return
      */
-    MQConsumeResult handle(String topic, String tag, List<MessageExt> msgs);
+    MqConsumeResult handle(String topic, String tag, List<MessageExt> msgs);
 }

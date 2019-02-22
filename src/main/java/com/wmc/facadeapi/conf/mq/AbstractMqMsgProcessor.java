@@ -9,11 +9,12 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * 消息处理器
  * @auther wangmingchang
  * @date 2019/2/21 10:30
  */
-public abstract class AbstractMQMsgProcessor implements MQMsgProcessor{
-    protected static final Logger logger = LoggerFactory.getLogger(AbstractMQMsgProcessor.class);
+public abstract class AbstractMqMsgProcessor implements MqMsgProcessor {
+    protected static final Logger logger = LoggerFactory.getLogger(AbstractMqMsgProcessor.class);
 
     /**
      * 消息处理<br/>
@@ -26,8 +27,8 @@ public abstract class AbstractMQMsgProcessor implements MQMsgProcessor{
      * @return
      */
     @Override
-    public MQConsumeResult handle(String topic, String tag, List<MessageExt> msgs) {
-        MQConsumeResult mqConsumeResult = new MQConsumeResult();
+    public MqConsumeResult handle(String topic, String tag, List<MessageExt> msgs) {
+        MqConsumeResult mqConsumeResult = new MqConsumeResult();
         /**可以增加一些其他逻辑*/
 
         for (MessageExt messageExt : msgs) {
@@ -45,7 +46,7 @@ public abstract class AbstractMQMsgProcessor implements MQMsgProcessor{
      * @param messageExt
      * @return
      */
-    protected abstract MQConsumeResult consumeMessage(String tag,List<String> keys, MessageExt messageExt);
+    protected abstract MqConsumeResult consumeMessage(String tag, List<String> keys, MessageExt messageExt);
 
 
 }

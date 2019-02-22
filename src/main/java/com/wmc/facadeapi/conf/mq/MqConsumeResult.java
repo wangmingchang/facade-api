@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @date 2019/2/21 10:28
  */
 @Data
-public class MQConsumeResult implements Serializable {
+public class MqConsumeResult implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
      * 是否处理成功

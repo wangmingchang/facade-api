@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +37,6 @@ public class CustomInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String pathInfo = request.getPathInfo();
         String requestURI = request.getRequestURI();
         String ipAddress = getIpAddress(request);
         String method = request.getMethod();
@@ -47,6 +47,7 @@ public class CustomInterceptor implements HandlerInterceptor {
         requestLogPo.setRequestType(method);
         requestLogPo.setRequestURI(requestURI);
         requestLogPo.setParameterBody(JSON.toJSONString(allRequestParam));
+        requestLogPo.setRequestTime(new Date());
         Message message = new Message(TopicEnum.TOPIC_FACADE_API.getCode(), TagsEnum.TAGS_REQUEST_LOG.getCode(),JSONObject.toJSONString(requestLogPo).getBytes());
         //默认3秒超时
         SendResult sendResult = defaultMQProducer.send(message);

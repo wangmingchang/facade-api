@@ -1,8 +1,11 @@
 package com.wmc.facadeapi.model.po;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.util.Date;
 
 /**
  * 请求日志po
@@ -23,5 +26,9 @@ public class RequestLogPo {
     private String requestType;
     /**请求参数*/
     private String parameterBody;
+    /**请求时间*/
+    private Date requestTime;
+    /**创建时间*/
+    private Date createTime;
 
 }

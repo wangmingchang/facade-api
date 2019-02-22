@@ -14,8 +14,8 @@ import org.springframework.util.StringUtils;
  * @date 2019/2/21 09:49
  */
 @SpringBootConfiguration
-public class MQProducerConfiguration {
-    public static final Logger LOGGER = LoggerFactory.getLogger(MQProducerConfiguration.class);
+public class MqProducerConfiguration {
+    public static final Logger LOGGER = LoggerFactory.getLogger(MqProducerConfiguration.class);
     /**
      * 发送同一类消息的设置为同一个group，保证唯一,默认不需要设置，rocketmq会使用ip@pid(pid代表jvm名字)作为唯一标示
      */

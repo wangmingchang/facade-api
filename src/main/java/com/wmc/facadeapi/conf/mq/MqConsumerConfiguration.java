@@ -16,8 +16,8 @@ import org.springframework.util.StringUtils;
  * @date 2019/2/21 10:00
  */
 @SpringBootConfiguration
-public class MQConsumerConfiguration {
-    public static final Logger LOGGER = LoggerFactory.getLogger(MQConsumerConfiguration.class);
+public class MqConsumerConfiguration {
+    public static final Logger LOGGER = LoggerFactory.getLogger(MqConsumerConfiguration.class);
     @Value("${rocketmq.consumer.namesrvAddr}")
     private String namesrvAddr;
     @Value("${rocketmq.consumer.groupName}")
@@ -31,7 +31,7 @@ public class MQConsumerConfiguration {
     @Value("${rocketmq.consumer.consumeMessageBatchMaxSize}")
     private int consumeMessageBatchMaxSize;
     @Autowired
-    private MQConsumeMsgListenerProcessor mqMessageListenerProcessor;
+    private MqConsumeMsgListenerProcessor mqMessageListenerProcessor;
 
     @Bean
     public DefaultMQPushConsumer getRocketMQConsumer() throws Exception {

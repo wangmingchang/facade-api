@@ -15,7 +15,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
 @Service
-public @interface MQConsumeService {
+public @interface MqConsumeService {
     /**
      * 消息主题
      */
